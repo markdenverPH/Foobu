@@ -1,26 +1,40 @@
 package com.example.babar.foobu;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
 
 public class SwipeActivity extends AppCompatActivity {
-
+    FirebaseAuth auth;
     private ArrayList<String> al;
     private ArrayAdapter<String> arrayAdapter;
     private int i;
+    Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
-
+        logout = findViewById(R.id.b_logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                auth.getInstance().signOut();
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+            }
+        });
             al = new ArrayList<>();
             al.add("php");
             al.add("c");
