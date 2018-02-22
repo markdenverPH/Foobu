@@ -52,6 +52,9 @@ public class RegistrationActivity extends AppCompatActivity {
         reg_lastname = findViewById(R.id.reg_lastname);
         reg_birthdate = findViewById(R.id.reg_birthdate);
         gender = findViewById(R.id.gender);
+
+
+
         auth = FirebaseAuth.getInstance();
         final ProgressDialog dialog = new ProgressDialog(RegistrationActivity.this);
 
@@ -92,14 +95,13 @@ public class RegistrationActivity extends AppCompatActivity {
                         if(!reg_pass_confirm.getText().equals(reg_pass.getText()) && !task.isSuccessful()){
                             Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getApplicationContext(), reg_firstname.getText(), Toast.LENGTH_SHORT).show();
                             try {
                                 String userId = auth.getCurrentUser().getUid();
-                                DatabaseReference dbase = FirebaseDatabase.getInstance().getReference();        //below is error; registering account but not names on dbase
-                                dbase.child("Users").child(gender.getText().toString()).child(userId).child("Firstname").setValue(reg_firstname.getText());
-                                dbase.child("Users").child(gender.getText().toString()).child(userId).child("Midname").setValue(reg_midname.getText());
-                                dbase.child("Users").child(gender.getText().toString()).child(userId).child("Lastname").setValue(reg_lastname.getText());
-                                dbase.child("Users").child(gender.getText().toString()).child(userId).child("Birthdate").setValue(hold_date);
+                                DatabaseReference dbase = FirebaseDatabase.getInstance().getReference("Users/" +gender.getText().toString() + "/"+userId);        //below is error; registering account but not names on dbase
+                                dbase.child("Firstname").setValue(reg_firstname.getText().toString());
+                                dbase.child("Midname").setValue(reg_midname.getText().toString());
+                                dbase.child("Lastname").setValue(reg_lastname.getText().toString());
+                                dbase.child("Birthdate").setValue(hold_date);
                             } catch(Exception e){
                                 Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show();
                                 Log.d("registration_error", e.toString());
