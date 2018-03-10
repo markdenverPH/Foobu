@@ -1,35 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_gravity="center"
-    android:layout_width="250dp"
-    android:layout_height="170dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:paddingBottom="50dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="50dp">
 
-    <TextView
-        android:id="@+id/helloText"
-        android:textSize="40sp"
-        android:textColor="@android:color/white"
-        android:background="#E339"
-        android:gravity="center"
-        tools:text="test"
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:elevation="2dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="2dp">
 
-    <View
-        android:id="@+id/item_swipe_left_indicator"
-        android:alpha="0"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_margin="10dp"
-        android:background="#A5F" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="5dp">
 
-    <View
-        android:id="@+id/item_swipe_right_indicator"
-        android:alpha="0"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_margin="10dp"
-        android:layout_gravity="right"
-        android:background="#5AF" />
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/applogo" />
 
-</FrameLayout>
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|center"
+                android:text="name here"
+                android:textColor="@android:color/black"
+                android:textSize="40sp"
+                tools:text="name here" />
+        </FrameLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

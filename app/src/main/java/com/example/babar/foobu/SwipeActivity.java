@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -22,45 +23,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SwipeActivity extends AppCompatActivity {
+    private cards cards_data[];
     FirebaseAuth auth;
-    private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
-    //private int i;
+    private arrayAdapter arrayAdapter;
     Button logout;
 
+    ListView lv;
+    List<cards> rowItems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
 
-//        logout = findViewById(R.id.b_logout);     logout button top left by mark
-//        logout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {        //logout
-//                auth.getInstance().signOut();
-//                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
-
         auth = FirebaseAuth.getInstance();
-
         checkUserSex();
-
-        al = new ArrayList<>();
-        //al.add("php");
-        //al.add("c");
-        //al.add("python");
-        //al.add("java");
-        //al.add("html");
-        //al.add("c++");
-        //al.add("css");
-        //al.add("javascript");
-
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al);
+        rowItems = new ArrayList<cards>();
+        arrayAdapter = new arrayAdapter(this, R.layout.item, rowItems);
 
         SwipeFlingAdapterView flingContainer = findViewById(R.id.frame);
 
@@ -70,7 +51,7 @@ public class SwipeActivity extends AppCompatActivity {
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
-                al.remove(0);
+                rowItems.remove(0);
                 arrayAdapter.notifyDataSetChanged();
             }
 
@@ -186,9 +167,10 @@ public class SwipeActivity extends AppCompatActivity {
         oppositeSexDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.exists() && dataSnapshot.child("Birthdate").getValue() != null) {
-                    Log.d("error", String.valueOf(dataSnapshot.child("Birthdate").getValue()));
-                    al.add(String.valueOf(dataSnapshot.child("Birthdate").getValue()));
+                if (dataSnapshot.exists()) {
+                    Log.d("getopposit: childadded", String.valueOf(dataSnapshot.child("Birthdate").getValue()));
+                    cards item = new cards(dataSnapshot.getKey(), dataSnapshot.child("Birthdate").getValue().toString());
+                    rowItems.add(item);
                     arrayAdapter.notifyDataSetChanged();
                 }
             }
