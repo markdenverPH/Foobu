@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -31,6 +32,9 @@ public class SwipeActivity extends AppCompatActivity {
     private arrayAdapter arrayAdapter;
     Button logout;
 
+    private String currentUid;
+    private DatabaseReference usersDb;
+
     ListView lv;
     List<cards> rowItems;
     @Override
@@ -38,8 +42,14 @@ public class SwipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
 
+        usersDb = FirebaseDatabase.getInstance().getReference().child("Users");
+
         auth = FirebaseAuth.getInstance();
+        //getthecurrentuser
+        currentUid = auth.getCurrentUser().getUid();
+
         checkUserSex();
+
         rowItems = new ArrayList<cards>();
         arrayAdapter = new arrayAdapter(this, R.layout.item, rowItems);
 
@@ -60,11 +70,20 @@ public class SwipeActivity extends AppCompatActivity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
+                /***Swipeleft Nope***/
+                cards obj = (cards) dataObject;
+                String userId = obj.getUserId();
+                usersDb.child(oppositeUserSex).child(userId).child("connections").child("nope").child(currentUid).setValue(true);
                 Toast.makeText(SwipeActivity.this, "Left!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
+                /***SwipeRight Yeps***/
+                cards obj = (cards) dataObject;
+                String userId = obj.getUserId();
+                usersDb.child(oppositeUserSex).child(userId).child("connections").child("yeps").child(currentUid).setValue(true);
+                isConnectionMatch(userId);
                 Toast.makeText(SwipeActivity.this, "Right!", Toast.LENGTH_SHORT).show();
             }
 
@@ -75,7 +94,7 @@ public class SwipeActivity extends AppCompatActivity {
                 //arrayAdapter.notifyDataSetChanged();
                 //Log.d("LIST", "notified");
                 //i++;
-                checkUserSex(); /*******MARK to fetch other data from dbase by executing this*****/
+                //checkUserSex(); /*******MARK to fetch other data from dbase by executing this*****/
             }
 
             @Override
@@ -92,6 +111,26 @@ public class SwipeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    /***Check if there is a match***/
+    private void isConnectionMatch(String userId) {
+        DatabaseReference currentUserConnectionsDb = usersDb.child(userSex).child(currentUid).child("connections").child("yeps").child(userId);
+        currentUserConnectionsDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Toast.makeText(SwipeActivity.this, "new Connection", Toast.LENGTH_LONG).show();
+                    usersDb.child(oppositeUserSex).child(dataSnapshot.getKey()).child("connections").child("matches").child(currentUid).setValue(true);
+                    usersDb.child(userSex).child(currentUid).child("connections").child("matches").child(dataSnapshot.getKey()).setValue(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private String userSex;
@@ -167,7 +206,7 @@ public class SwipeActivity extends AppCompatActivity {
         oppositeSexDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists() && !dataSnapshot.child("connections").child("nope").hasChild(currentUid) && !dataSnapshot.child("connections").child("yeps").hasChild(currentUid)) {
                     Log.d("getopposit: childadded", String.valueOf(dataSnapshot.child("Birthdate").getValue()));
                     cards item = new cards(dataSnapshot.getKey(), dataSnapshot.child("Birthdate").getValue().toString());
                     rowItems.add(item);
