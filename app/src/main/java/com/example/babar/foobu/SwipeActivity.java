@@ -6,12 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,8 +26,6 @@ public class SwipeActivity extends AppCompatActivity {
     private cards cards_data[];
     FirebaseAuth auth;
     private arrayAdapter arrayAdapter;
-    Button logout;
-
     private String currentUid;
     private DatabaseReference usersDb;
 
@@ -232,12 +226,14 @@ public class SwipeActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {     //added by mark for logout toolber topright
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {   //added by mark for logout toolber topright
         // TODO Auto-generated method stub
@@ -248,6 +244,11 @@ public class SwipeActivity extends AppCompatActivity {
                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
+                break;
+            case R.id.menu_settings:
+                Intent intent2 = new Intent(getBaseContext(), Settings.class);
+                intent2.putExtra("userSex", userSex);
+                startActivity(intent2);
                 break;
         }
         return super.onOptionsItemSelected(item);
