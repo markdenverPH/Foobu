@@ -202,7 +202,7 @@ public class SwipeActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.exists() && !dataSnapshot.child("connections").child("nope").hasChild(currentUid) && !dataSnapshot.child("connections").child("yeps").hasChild(currentUid)) {
                     Log.d("getopposit: childadded", String.valueOf(dataSnapshot.child("Birthdate").getValue()));
-                    cards item = new cards(dataSnapshot.getKey(), dataSnapshot.child("Birthdate").getValue().toString());
+                    cards item = new cards(dataSnapshot.getKey(), dataSnapshot.child("Birthdate").getValue().toString(), dataSnapshot.child("profileImageUrl").getValue().toString());
                     rowItems.add(item);
                     arrayAdapter.notifyDataSetChanged();
                 }
