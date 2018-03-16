@@ -35,8 +35,14 @@ public class arrayAdapter extends ArrayAdapter<cards>{
 
         name.setText(card_item.getName());
         //image.setImageResource(R.drawable.applogo);
-
-        Glide.with(getContext()).load(card_item.getProfileImageUrl()).into(image);
+        switch (card_item.getProfileImageUrl()){
+            case"default":
+                Glide.with(convertView.getContext()).load(R.mipmap.ic_applogo).into(image);
+                break;
+            default:
+                Glide.with(convertView.getContext()).load(card_item.getProfileImageUrl()).into(image);
+                break;
+        }
 
         return convertView;
     }

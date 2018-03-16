@@ -27,6 +27,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RegistrationActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -52,8 +55,6 @@ public class RegistrationActivity extends AppCompatActivity {
         reg_lastname = findViewById(R.id.reg_lastname);
         reg_birthdate = findViewById(R.id.reg_birthdate);
         gender = findViewById(R.id.gender);
-
-
 
         auth = FirebaseAuth.getInstance();
         final ProgressDialog dialog = new ProgressDialog(RegistrationActivity.this);
@@ -98,10 +99,13 @@ public class RegistrationActivity extends AppCompatActivity {
                             try {
                                 String userId = auth.getCurrentUser().getUid();
                                 DatabaseReference dbase = FirebaseDatabase.getInstance().getReference("Users/" +gender.getText().toString() + "/"+userId);        //below is error; registering account but not names on dbase
-                                dbase.child("Firstname").setValue(reg_firstname.getText().toString());
-                                dbase.child("Midname").setValue(reg_midname.getText().toString());
-                                dbase.child("Lastname").setValue(reg_lastname.getText().toString());
-                                dbase.child("Birthdate").setValue(hold_date);
+                                Map userInfo = new HashMap<>();
+                                userInfo.put("profileImageUrl", "default");
+                                userInfo.put("Firstname", reg_firstname.getText().toString());
+                                userInfo.put("Midname", reg_midname.getText().toString());
+                                userInfo.put("Lastname", reg_lastname.getText().toString());
+                                userInfo.put("Birthdate", hold_date);
+                                dbase.updateChildren(userInfo);
                             } catch(Exception e){
                                 Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show();
                                 Log.d("registration_error", e.toString());
@@ -112,7 +116,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
 
     public void birthdate(View v){              //executed when user clicks bdate edittext

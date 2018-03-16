@@ -122,7 +122,14 @@ public class Settings extends AppCompatActivity {
                     }
                     if(map.get("profileImageUrl") != null){
                         str_image = map.get("profileImageUrl").toString();
-                        Glide.with(getApplication()).load(str_image).into(image);
+                        switch (str_image){
+                            case"default":
+                                Glide.with(getApplicationContext()).load(R.mipmap.ic_applogo).into(image);
+                                break;
+                            default:
+                                Glide.with(getApplicationContext()).load(str_image).into(image);
+                                break;
+                        }
 //                        Picasso.with(getApplicationContext())
 //                        .load(str_image)
 //                        .into(image);
