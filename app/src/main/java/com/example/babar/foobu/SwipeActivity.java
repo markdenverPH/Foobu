@@ -74,7 +74,7 @@ public class SwipeActivity extends AppCompatActivity {
                 cards obj = (cards) dataObject;
                 String userId = obj.getUserId();
                 usersDb.child(oppositeUserSex).child(userId).child("connections").child("nope").child(currentUid).setValue(true);
-                Toast.makeText(SwipeActivity.this, "Left!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SwipeActivity.this, "Nope!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -84,7 +84,7 @@ public class SwipeActivity extends AppCompatActivity {
                 String userId = obj.getUserId();
                 usersDb.child(oppositeUserSex).child(userId).child("connections").child("yeps").child(currentUid).setValue(true);
                 isConnectionMatch(userId);
-                Toast.makeText(SwipeActivity.this, "Right!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SwipeActivity.this, "Foobu!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
