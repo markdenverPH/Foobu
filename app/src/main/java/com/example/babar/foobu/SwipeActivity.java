@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.babar.foobu.Matches.Matches;
+import com.example.babar.foobu.Cards.arrayAdapter;
+import com.example.babar.foobu.Cards.cards;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -25,7 +28,7 @@ import java.util.List;
 public class SwipeActivity extends AppCompatActivity {
     private cards cards_data[];
     FirebaseAuth auth;
-    private arrayAdapter arrayAdapter;
+    private com.example.babar.foobu.Cards.arrayAdapter arrayAdapter;
     private String currentUid;
     private DatabaseReference usersDb;
 
@@ -244,6 +247,10 @@ public class SwipeActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
 
         switch(item.getItemId()){
+            case R.id.menu_matches:
+                Intent intent3 = new Intent(getBaseContext(), Matches.class);
+                startActivity(intent3);
+                break;
             case R.id.menu_logout:
                 auth.getInstance().signOut();
                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
